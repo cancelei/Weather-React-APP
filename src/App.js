@@ -1,40 +1,50 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import CityCard from './components/citycard/citycard';
 import Search from './components/search/search';
-import CurrentWeather from './components/current-weather/current-weather';
-import Forecast from './components/forecast/forecast';
 import { WEATHER_API_URL, WEATHER_API_KEY } from './api';
-import './App.css';
+
+const cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio'];
 
 function App() {
-  const [currentWeather, setCurrentWeather] = useState(null);
-  const [forecast, setForecast] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
+
+  const fetchWeatherData = async (cityName) => {
+    try {
+      const response = await fetch(`${WEATHER_API_URL}/weather?q=${cityName}&appid=${WEATHER_API_KEY}`);
+      const data = await response.json();
+      setWeatherData(data);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching weather data:', error);
+    }
+  };
+
+  const handleCityClick = (cityName) => {
+    fetchWeatherData(cityName);
+  };
 
   const handleOnSearchChange = (searchData) => {
-    const [lat, lon] = searchData.value.split(' ');
-
-    const currentWeatherFetch = fetch(
-      `${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`,
-    );
-    const forecastFetch = fetch(
-      `${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`,
-    );
-
-    Promise.all([currentWeatherFetch, forecastFetch])
-      .then(async (response) => {
-        const weatherResponse = await response[0].json();
-        const forcastResponse = await response[1].json();
-
-        setCurrentWeather({ city: searchData.label, ...weatherResponse });
-        setForecast({ city: searchData.label, ...forcastResponse });
-      })
-      .catch((error) => console.log(error));
+    // Assuming searchData contains the city name
+    const cityName = searchData.label.split(',')[0]; // Extract city name from the label
+    fetchWeatherData(cityName);
   };
 
   return (
     <div className="container">
       <Search onSearchChange={handleOnSearchChange} />
-      {currentWeather && <CurrentWeather data={currentWeather} />}
-      {forecast && <Forecast data={forecast} />}
+      <div className="city-cards">
+        {cities.map((city) => (
+          <CityCard key={city} cityName={city} onClick={handleCityClick} />
+        ))}
+      </div>
+      {weatherData && (
+        <div>
+          {/* Display weather data here */}
+          <h2>{weatherData.name}</h2>
+          <p>{weatherData.weather[0].description}</p>
+          {/* You can expand this section to display more details */}
+        </div>
+      )}
     </div>
   );
 }

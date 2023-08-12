@@ -35,4 +35,8 @@ const Search = ({ onSearchChange }) => {
   );
 };
 
+Search.propTypes = {
+  onSearchChange: propTypes.func.isRequired,
+};
+
 export default Search;

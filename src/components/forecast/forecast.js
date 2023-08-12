@@ -27,10 +27,10 @@ const Forecast = ({ data }) => {
 
   return (
     <>
-      <label className="title" htmlFor="title" aria-controls="title">Daily</label>
-      <Accordion allowZeroExpanded aria-labelledby="daily-label">
+      <span className="title">Daily</span>
+      <Accordion allowZeroExpanded>
         {data.list.splice(0, 7).map((item, idx) => (
-          <AccordionItem key={idx} aria-controls="item">
+          <AccordionItem key={item.dt || idx}>
             <AccordionItemHeading>
               <AccordionItemButton>
                 <div className="daily-item">
@@ -39,57 +39,58 @@ const Forecast = ({ data }) => {
                     className="icon-small"
                     alt="weather"
                   />
-                  <label className="day" htmlFor="forecasttitle" aria-controls="forcast title">{forecastDays[idx]}</label>
-                  <span className="description" id="forecasttitle" aria-controls="Description">
+                  <span className="day">{forecastDays[idx]}</span>
+                  <span className="description">
                     {item.weather[0].description}
                   </span>
-                  <label className="min-max" htmlFor="minmaxtemperature" aria-controls="minmaxtemp info">
+                  <span className="min-max">
                     {Math.round(item.main.temp_max)}
                     °C /
                     {Math.round(item.main.temp_min)}
                     °C
-                  </label>
+                  </span>
                 </div>
               </AccordionItemButton>
             </AccordionItemHeading>
             <AccordionItemPanel>
               <div className="daily-details-grid">
                 <div className="daily-details-grid-item">
-                  <label htmlFor="pressure" aria-controls="Pressure info">Pressure:</label>
-                  <span id="pressure">{item.main.pressure}</span>
+                  <span>Pressure:</span>
+                  <span>{item.main.pressure}</span>
                 </div>
                 <div className="daily-details-grid-item">
-                  <label htmlFor="titlehumidity" aria-controls="Humidity info">Humidity:</label>
-                  <label htmlFor="humidity" aria-controls="Humidity info">{item.main.humidity}</label>
+                  <span>Humidity:</span>
+                  <span>{item.main.humidity}</span>
                 </div>
                 <div className="daily-details-grid-item">
-                  <label htmlFor="clouds" aria-controls="Cloud info">Clouds:</label>
-                  <label htmlFor="information for clouds" aria-controls="Cloud info">
+                  <span>Clouds:</span>
+                  <span>
                     {item.clouds.all}
                     %
-                  </label>
+                  </span>
                 </div>
                 <div className="daily-details-grid-item">
-                  <label htmlFor="title for Wind Speed" aria-controls="Wind info">Wind speed:</label>
-                  <label htmlFor="infor for Wind Speed" aria-controls="Wind info">
+                  <span>Wind speed:</span>
+                  <span>
                     {item.wind.speed}
                     {' '}
                     m/s
-                  </label>
+                  </span>
                 </div>
                 <div className="daily-details-grid-item">
-                  <label htmlFor="Sea Level" aria-controls="Sea Level info">Sea level:</label>
-                  <label htmlFor="Sea Level Info" aria-controls="Sea Level info">
+                  <span>Sea level:</span>
+                  <span>
                     {item.main.sea_level}
+                    {' '}
                     m
-                  </label>
+                  </span>
                 </div>
                 <div className="daily-details-grid-item">
-                  <label htmlFor="temp feel title" aria-controls="temp feel">Feels like:</label>
-                  <label htmlFor="temp feel value" aria-controls="temp feel value">
+                  <span>Feels like:</span>
+                  <span>
                     {item.main.feels_like}
                     °C
-                  </label>
+                  </span>
                 </div>
               </div>
             </AccordionItemPanel>
